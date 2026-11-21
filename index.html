@@ -15,6 +15,9 @@
     posthog.register({ site: 'scifi-idea-roulette' });
   }
 </script>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bowlby+One&family=Instrument+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap">
@@ -57,6 +60,9 @@ body {
   color: var(--ink); text-shadow: 3px 2px 0 var(--pink), -2px -1px 0 rgba(47,95,224,.55);
   text-wrap: balance;
 }
+.byline { align-self: flex-start; display: inline-flex; align-items: center; gap: 6px; font: 700 12px/1 var(--f-mono); letter-spacing: .04em; color: var(--ink); text-decoration: none; padding: 7px 10px; border: 1.5px solid var(--ink); border-radius: 999px; background: var(--paper-2); }
+.byline:hover { background: var(--yellow); }
+.byline svg { width: 12px; height: 12px; }
 .mast p { margin: 0; color: var(--muted); max-width: 46ch; font-size: 15px; }
 .mast b { color: var(--ink); }
 
@@ -198,6 +204,7 @@ footer a { color: var(--blue); }
 
 <div class="wrap">
   <header class="mast">
+    <a class="byline" href="https://x.com/atareh" target="_blank" rel="noopener" id="byline">Built by @atareh <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
     <h1>Sci-Fi Idea Roulette</h1>
     <p>Spin one of <b id="count">3,743</b> inventions from sci-fi novels written since 1634. We score how buildable it is today, then pitch you the startup.</p>
   </header>
@@ -491,6 +498,7 @@ footer a { color: var(--blue); }
     track('copy_link', { id: current.id });
   });
   function fallbackCopy(t) { const ta = document.createElement('textarea'); ta.value = t; document.body.appendChild(ta); ta.select(); let ok = false; try { ok = document.execCommand('copy'); } catch (e) {} ta.remove(); toast(ok ? 'Link copied' : t); }
+  $('byline').addEventListener('click', () => track('byline_click'));
   $('b-x').addEventListener('click', () => track('post_x', { id: current && current.id }));
   $('b-card').addEventListener('click', openCard);
   $('card-close').addEventListener('click', () => $('overlay').hidden = true);

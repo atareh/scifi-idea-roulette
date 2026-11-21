@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+<rect width="64" height="64" rx="14" fill="#1A1D3A"/>
+<circle cx="35" cy="35" r="22" fill="#2F5FE0"/>
+<circle cx="32" cy="32" r="22" fill="#F6F7F8"/>
+<path d="M32 32L32.00 12.00A20 20 0 0 1 46.14 17.86Z" fill="#FFD23F"/><path d="M32 32L46.14 17.86A20 20 0 0 1 52.00 32.00Z" fill="#FF3E9A"/><path d="M32 32L52.00 32.00A20 20 0 0 1 46.14 46.14Z" fill="#FFD23F"/><path d="M32 32L46.14 46.14A20 20 0 0 1 32.00 52.00Z" fill="#FF3E9A"/><path d="M32 32L32.00 52.00A20 20 0 0 1 17.86 46.14Z" fill="#FFD23F"/><path d="M32 32L17.86 46.14A20 20 0 0 1 12.00 32.00Z" fill="#FF3E9A"/><path d="M32 32L12.00 32.00A20 20 0 0 1 17.86 17.86Z" fill="#FFD23F"/><path d="M32 32L17.86 17.86A20 20 0 0 1 32.00 12.00Z" fill="#FF3E9A"/>
+<circle cx="32" cy="32" r="22" fill="none" stroke="#F6F7F8" stroke-width="3"/>
+<circle cx="32" cy="32" r="5.5" fill="#1A1D3A"/>
+<path d="M32 4.5l4.5 7h-9z" fill="#F6F7F8"/>
+</svg>
