@@ -1,0 +1,570 @@
+<meta charset="utf-8">
+<title>Sci-Fi Idea Roulette</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Spin a random invention from 3,743 sci-fi novels. See how buildable it is today and get a startup pitch for it.">
+<meta property="og:title" content="Sci-Fi Idea Roulette">
+<meta property="og:description" content="Spin a random invention from sci-fi. Find out if you can build it, and pitch the startup.">
+<meta property="og:image" content="https://scifi-idea-roulette.vercel.app/og.png">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<script>
+  if (/^https?:$/.test(location.protocol) && !/claude|anthropic|usercontent|localhost|127\.0\.0\.1/.test(location.hostname)) {
+    !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset identify alias people.set people.set_once set_config".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+    posthog.init('phc_rEbrL7KLtw4K8UUr3yi8Jq3nAMLCp9TbGf8dLdYTjQJA', { api_host: 'https://us.i.posthog.com', person_profiles: 'identified_only', autocapture: true, capture_pageview: true });
+    posthog.register({ site: 'scifi-idea-roulette' });
+  }
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bowlby+One&family=Instrument+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap">
+<style>
+/* Layout: one riso-printed "ticket" column. Masthead, the invention, the score, the pitch, share row. Spin bar pinned to the bottom. */
+:root {
+  --paper: #E8EBEE;      /* cool newsprint */
+  --paper-2: #F6F7F8;    /* card stock */
+  --ink: #1A1D3A;        /* navy riso ink */
+  --muted: #565B78;
+  --pink: #FF3E9A;       /* fluoro pink riso */
+  --blue: #2F5FE0;       /* medium blue riso */
+  --yellow: #FFD23F;
+  --line: #C9CED8;
+  --good: #19A974; --warn: #E8A317; --bad: #E5484D;
+  --f-display: "Bowlby One", "Arial Black", Impact, sans-serif;
+  --f-body: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "Space Mono", ui-monospace, Menlo, Consolas, monospace;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { background: var(--paper); color: var(--ink); }
+body {
+  font-family: var(--f-body); font-size: 16px; line-height: 1.5;
+  background-color: var(--paper);
+  background-image: radial-gradient(rgba(47,95,224,.09) 1px, transparent 1.3px);
+  background-size: 7px 7px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 20px 120px;
+}
+.wrap { max-width: 640px; margin: 0 auto; display: flex; flex-direction: column; gap: 18px; }
+
+/* Masthead */
+.mast { text-align: left; display: flex; flex-direction: column; gap: 8px; padding-top: 6px; }
+.mast h1 {
+  margin: 0; font-family: var(--f-display); font-weight: 400; text-transform: uppercase;
+  font-size: clamp(2.3rem, 10vw, 4.1rem); line-height: .9; letter-spacing: -.01em;
+  color: var(--ink); text-shadow: 3px 2px 0 var(--pink), -2px -1px 0 rgba(47,95,224,.55);
+  text-wrap: balance;
+}
+.mast p { margin: 0; color: var(--muted); max-width: 46ch; font-size: 15px; }
+.mast b { color: var(--ink); }
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  font: 600 13px/1 var(--f-body); padding: 9px 12px; border-radius: 999px;
+  border: 1.5px solid var(--ink); background: transparent; color: var(--ink); cursor: pointer;
+}
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--paper-2); }
+.chip:focus-visible, button:focus-visible, a:focus-visible { outline: 3px solid var(--pink); outline-offset: 2px; }
+
+/* Ticket */
+.ticket {
+  background: var(--paper-2); border: 2px solid var(--ink); border-radius: 4px;
+  box-shadow: 6px 6px 0 var(--blue);
+  display: flex; flex-direction: column;
+}
+.sec { padding: 18px 18px; display: flex; flex-direction: column; gap: 12px; }
+.sec + .sec { border-top: 2px dashed var(--line); }
+.eyebrow { font: 700 11px/1.2 var(--f-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.meta { display: flex; flex-wrap: wrap; gap: 6px 14px; font: 400 13px/1.4 var(--f-mono); color: var(--muted); }
+.meta strong { color: var(--ink); font-weight: 700; }
+.slot {
+  min-height: 1.1em;
+  font-family: var(--f-display); font-size: clamp(1.8rem, 7.4vw, 2.7rem); line-height: 1.05;
+  color: var(--ink); text-wrap: balance; overflow-wrap: anywhere;
+}
+.slot.spinning { color: var(--blue); filter: blur(.4px); }
+.desc { margin: 0; font-size: 17px; line-height: 1.5; }
+.desc::before { content: "“"; color: var(--pink); font-weight: 700; }
+.desc::after { content: "”"; color: var(--pink); font-weight: 700; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag { font: 700 11px/1 var(--f-mono); letter-spacing: .06em; text-transform: uppercase; padding: 6px 8px; border-radius: 3px; background: var(--paper); color: var(--ink); border: 1px solid var(--line); }
+.tag.hot { background: var(--yellow); border-color: var(--ink); }
+
+/* Score */
+.score { display: grid; grid-template-columns: 150px 1fr; gap: 16px; align-items: center; }
+.gauge { position: relative; width: 150px; }
+.gauge svg { display: block; width: 100%; height: auto; }
+.gauge .num { position: absolute; left: 0; right: 0; bottom: 2px; text-align: center; font-family: var(--f-display); font-size: 40px; line-height: 1; font-variant-numeric: tabular-nums; }
+.gauge .num small { font: 700 12px var(--f-mono); color: var(--muted); }
+.verdict { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.pill { align-self: flex-start; font: 700 13px/1 var(--f-body); padding: 7px 11px; border-radius: 999px; color: #fff; background: var(--ink); }
+.pill[data-tier="real"] { background: var(--blue); }
+.pill[data-tier="ship"] { background: var(--good); }
+.pill[data-tier="yc"] { background: var(--good); }
+.pill[data-tier="deep"] { background: var(--warn); color: var(--ink); }
+.pill[data-tier="break"] { background: var(--bad); }
+.pill[data-tier="no"] { background: var(--pink); }
+.verdict p { margin: 0; color: var(--muted); font-size: 14px; }
+.bars { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 18px; }
+.bar { display: flex; flex-direction: column; gap: 4px; }
+.bar .lbl { display: flex; justify-content: space-between; font: 400 12px var(--f-mono); color: var(--muted); }
+.bar .lbl b { color: var(--ink); font-variant-numeric: tabular-nums; }
+.bar .track { height: 8px; background: var(--paper); border: 1px solid var(--line); border-radius: 2px; overflow: hidden; }
+.bar .fill { height: 100%; background: var(--blue); width: 0; transition: width .6s cubic-bezier(.2,.8,.2,1); }
+.waited { font: 400 13px var(--f-mono); color: var(--muted); }
+.waited b { color: var(--pink); }
+
+/* Pitch */
+.sname { font-family: var(--f-display); font-size: clamp(1.6rem, 6.5vw, 2.2rem); line-height: 1; color: var(--pink); overflow-wrap: anywhere; }
+.tagline { margin: 0; font-weight: 700; font-size: 18px; }
+.pitch { margin: 0; font-size: 16px; }
+.terms { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border: 1.5px solid var(--ink); border-radius: 3px; }
+.term { padding: 10px 12px; display: flex; flex-direction: column; gap: 2px; min-width: 0; border-bottom: 1px solid var(--line); }
+.term:nth-child(odd) { border-right: 1px solid var(--line); }
+.term.wide { grid-column: 1 / -1; border-right: 0; }
+.term:last-child { border-bottom: 0; }
+.term .k { font: 700 10px/1.2 var(--f-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.term .v { font-weight: 600; font-size: 15px; font-variant-numeric: tabular-nums; }
+.term .v.big { font-family: var(--f-mono); font-weight: 700; font-size: 18px; }
+
+/* Share */
+.share { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px; text-decoration: none;
+  font: 700 14px/1 var(--f-body); padding: 13px 10px; border-radius: 4px; cursor: pointer;
+  border: 2px solid var(--ink); background: var(--paper-2); color: var(--ink); min-height: 46px;
+}
+.btn.x { background: var(--ink); color: var(--paper-2); }
+.btn svg { width: 16px; height: 16px; flex: none; }
+.btn:active { transform: translate(1px, 1px); }
+
+/* Spin bar */
+.spinbar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 20;
+  padding: 12px max(16px, env(safe-area-inset-right, 0px)) calc(12px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+  background: linear-gradient(to top, var(--paper) 70%, rgba(232,235,238,0));
+}
+.spin {
+  display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; max-width: 640px; margin: 0 auto;
+  font-family: var(--f-display); font-size: 22px; letter-spacing: .02em; text-transform: uppercase;
+  padding: 16px; border-radius: 6px; border: 2.5px solid var(--ink); cursor: pointer;
+  background: var(--yellow); color: var(--ink); box-shadow: 4px 4px 0 var(--pink);
+}
+.spin:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--pink); }
+.spin kbd { font: 700 11px var(--f-mono); padding: 3px 6px; border: 1px solid var(--ink); border-radius: 3px; opacity: .7; }
+@media (hover: none) { .spin kbd { display: none; } }
+
+.tabs { display: grid; grid-template-columns: 1fr 1fr; border: 2px solid var(--ink); border-radius: 6px; overflow: hidden; }
+.tab { font: 700 15px/1 var(--f-body); padding: 13px 10px; border: 0; background: var(--paper-2); color: var(--ink); cursor: pointer; }
+.tab + .tab { border-left: 2px solid var(--ink); }
+.tab[aria-selected="true"] { background: var(--ink); color: var(--paper-2); }
+.browse { display: flex; flex-direction: column; gap: 12px; }
+.tools { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; }
+.tools input, .tools select { font: 500 16px var(--f-body); padding: 11px 12px; border: 2px solid var(--ink); border-radius: 4px; background: var(--paper-2); color: var(--ink); min-width: 0; }
+.found { font: 400 13px var(--f-mono); color: var(--muted); }
+.list { display: flex; flex-direction: column; background: var(--paper-2); border: 2px solid var(--ink); border-radius: 4px; }
+.row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: center; text-align: left; width: 100%; padding: 12px 14px; border: 0; border-bottom: 1px solid var(--line); background: transparent; color: var(--ink); cursor: pointer; font: inherit; }
+.row:last-child { border-bottom: 0; }
+.row:hover { background: var(--paper); }
+.row .nm { font-weight: 700; font-size: 16px; overflow-wrap: anywhere; }
+.row .sub { font: 400 12px/1.4 var(--f-mono); color: var(--muted); overflow-wrap: anywhere; }
+.row .d { font-size: 14px; color: var(--ink); opacity: .8; margin-top: 2px; }
+.badge { font: 700 15px/1 var(--f-mono); min-width: 46px; text-align: center; padding: 8px 6px; border-radius: 4px; color: #fff; font-variant-numeric: tabular-nums; }
+.badge[data-tier="real"] { background: var(--blue); } .badge[data-tier="ship"], .badge[data-tier="yc"] { background: var(--good); }
+.badge[data-tier="deep"] { background: var(--warn); color: var(--ink); } .badge[data-tier="break"] { background: var(--bad); } .badge[data-tier="no"] { background: var(--pink); }
+.more { align-self: center; }
+footer { font-size: 13px; color: var(--muted); display: flex; flex-direction: column; gap: 6px; }
+footer a { color: var(--blue); }
+
+/* Card overlay */
+.overlay { position: fixed; inset: 0; z-index: 40; background: rgba(26,29,58,.82); display: flex; align-items: center; justify-content: center;
+  padding: calc(16px + env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) calc(16px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); }
+.sheet { background: var(--paper-2); border: 2px solid var(--ink); border-radius: 6px; padding: 14px; display: flex; flex-direction: column; gap: 10px; max-width: 420px; width: 100%; max-height: 100%; }
+.sheet img { width: 100%; height: auto; border: 1px solid var(--line); border-radius: 3px; min-height: 0; object-fit: contain; flex: 1 1 auto; }
+.sheet p { margin: 0; font-size: 13px; color: var(--muted); text-align: center; }
+.sheet .row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.toast { position: fixed; left: 50%; bottom: calc(96px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 50; background: var(--ink); color: var(--paper-2); padding: 10px 14px; border-radius: 4px; font-weight: 600; font-size: 14px; }
+
+@media (max-width: 440px) {
+  .score { grid-template-columns: 118px 1fr; gap: 12px; }
+  .gauge { width: 118px; } .gauge .num { font-size: 32px; }
+  .sec { padding: 16px 14px; }
+  .btn { font-size: 13px; padding: 12px 6px; }
+}
+@media (prefers-reduced-motion: reduce) { .bar .fill { transition: none; } }
+</style>
+
+<div class="wrap">
+  <header class="mast">
+    <h1>Sci-Fi Idea Roulette</h1>
+    <p>Spin one of <b id="count">3,743</b> inventions from sci-fi novels written since 1634. We score how buildable it is today, then pitch you the startup.</p>
+  </header>
+
+  <div class="tabs" role="tablist" aria-label="View">
+    <button class="tab" id="tab-spin" role="tab" aria-selected="true">Spin</button>
+    <button class="tab" id="tab-all" role="tab" aria-selected="false">See all <span id="count2">3,743</span></button>
+  </div>
+
+  <div class="chips" role="group" aria-label="Which ideas to show">
+    <button class="chip" id="f-all" data-f="all" aria-pressed="true">Everything</button>
+    <button class="chip" id="f-unbuilt" data-f="unbuilt" aria-pressed="false">Not built yet</button>
+    <button class="chip" id="f-real" data-f="real" aria-pressed="false">Already real</button>
+    <button class="chip" id="f-bits" data-f="bits" aria-pressed="false">Software only</button>
+    <button class="chip" id="f-moon" data-f="moon" aria-pressed="false">Physics says no</button>
+  </div>
+
+  <section class="browse" id="browse" hidden>
+    <div class="tools">
+      <input id="q" type="search" placeholder="Search inventions, novels, authors" aria-label="Search" autocomplete="off">
+      <select id="sort" aria-label="Sort">
+        <option value="score-d">Most buildable</option>
+        <option value="score-a">Least buildable</option>
+        <option value="year-a">Oldest first</option>
+        <option value="year-d">Newest first</option>
+        <option value="name">A to Z</option>
+      </select>
+    </div>
+    <div class="found" id="found"></div>
+    <div class="list" id="list"></div>
+    <button class="btn more" id="more" type="button">Show more</button>
+  </section>
+
+  <article class="ticket" id="ticket" aria-live="polite">
+    <section class="sec">
+      <div class="meta"><span id="m-year">1968</span><span>from <strong id="m-novel">Do Androids Dream of Electric Sheep?</strong></span><span>by <span id="m-author">Philip K. Dick</span></span></div>
+      <div class="slot" id="slot">Mood Organ</div>
+      <p class="desc" id="desc">A device which allows you to dial the mood you would like to have.</p>
+      <div class="tags" id="tags"></div>
+    </section>
+
+    <section class="sec">
+      <div class="eyebrow">Buildable today?</div>
+      <div class="score">
+        <div class="gauge" aria-hidden="true">
+          <svg viewBox="0 0 160 92">
+            <path d="M12 84 A68 68 0 0 1 148 84" fill="none" stroke="#C9CED8" stroke-width="14" stroke-linecap="butt"/>
+            <path id="arc" d="M12 84 A68 68 0 0 1 148 84" fill="none" stroke="#2F5FE0" stroke-width="14" stroke-dasharray="213.6" stroke-dashoffset="213.6" style="transition: stroke-dashoffset .7s cubic-bezier(.2,.8,.2,1)"/>
+          </svg>
+          <div class="num"><span id="score">0</span><small>/100</small></div>
+        </div>
+        <div class="verdict">
+          <span class="pill" id="pill" data-tier="deep">…</span>
+          <p id="vnote"></p>
+        </div>
+      </div>
+      <div class="bars" id="bars"></div>
+      <div class="waited" id="waited"></div>
+    </section>
+
+    <section class="sec">
+      <div class="eyebrow">The startup</div>
+      <div class="sname" id="sname">Moodly</div>
+      <p class="tagline" id="tagline"></p>
+      <p class="pitch" id="pitch"></p>
+      <div class="terms">
+        <div class="term"><span class="k">Round</span><span class="v" id="t-round"></span></div>
+        <div class="term"><span class="k">Raising</span><span class="v big" id="t-raise"></span></div>
+        <div class="term"><span class="k">Post-money</span><span class="v big" id="t-post"></span></div>
+        <div class="term"><span class="k">Market size</span><span class="v big" id="t-tam"></span></div>
+        <div class="term wide"><span class="k">Business model</span><span class="v" id="t-model"></span></div>
+        <div class="term wide"><span class="k">First customer</span><span class="v" id="t-cust"></span></div>
+        <div class="term wide"><span class="k">Biggest risk</span><span class="v" id="t-risk"></span></div>
+      </div>
+    </section>
+
+    <section class="sec">
+      <div class="share">
+        <a class="btn x" id="b-x" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>Post</a>
+        <button class="btn" id="b-copy" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>Copy link</button>
+        <button class="btn" id="b-card" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg>Card</button>
+      </div>
+    </section>
+  </article>
+
+  <footer>
+    <span>Ideas from the <a href="https://www.notboring.co/p/sci-fi-idea-bank" target="_blank" rel="noopener">Not Boring Sci-Fi Idea Bank</a>, built on Technovelgy's list. Scores and pitches are generated for fun, not investment advice.</span>
+    <span id="foot-id"></span>
+  </footer>
+</div>
+
+<div class="spinbar"><button class="spin" id="spin" type="button">Spin <kbd>space</kbd></button></div>
+
+<div class="overlay" id="overlay" hidden>
+  <div class="sheet" role="dialog" aria-label="Share card">
+    <img id="card-img" alt="Share card for this idea">
+    <p id="card-hint">Long-press or right-click the image to save it.</p>
+    <div class="row">
+      <button class="btn x" id="card-share" type="button">Share image</button>
+      <button class="btn" id="card-close" type="button">Close</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script src="engine.js"></script>
+<script>
+(function () {
+  const $ = id => document.getElementById(id);
+  const LIVE_URL = 'https://scifi-idea-roulette.vercel.app/'; // placeholder until a real domain is chosen
+  const onRealHost = /^https?:$/.test(location.protocol) && !/claude|anthropic|usercontent|localhost|127\.0\.0\.1/.test(location.hostname);
+  const BASE = onRealHost ? location.origin + location.pathname : LIVE_URL;
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  let ideas = [], byId = new Map(), filter = 'all', current = null, spinning = false;
+
+  function pool() {
+    if (filter === 'all') return ideas;
+    if (filter === 'unbuilt') return ideas.filter(i => i[6] !== 'Yes');
+    if (filter === 'real') return ideas.filter(i => i[6] === 'Yes');
+    if (filter === 'bits') return ideas.filter(i => i[11] === 'Bits');
+    if (filter === 'moon') return ideas.filter(i => Roulette.analyze(i).score < 25);
+    return ideas;
+  }
+  const shareUrl = a => BASE + '#idea-' + a.id;
+  const shareText = a => `I spun the Sci-Fi Idea Roulette and got the ${a.name} (${a.novel}, ${a.year}).\n\nBuildable today: ${a.score}/100, "${a.verdict.label}"\nThe startup: ${a.startup.name}. ${a.startup.tagline}\n\nSpin yours:`;
+
+  function render(a) {
+    current = a;
+    $('m-year').textContent = a.year;
+    $('m-novel').textContent = a.novel || 'Unknown work';
+    $('m-author').textContent = a.author || 'Unknown';
+    $('slot').textContent = a.name;
+    $('desc').textContent = a.desc || 'No description survived the centuries.';
+    $('desc').hidden = !a.desc && false;
+    const tags = [a.category, a.bitsAtoms === 'Bits' ? 'Software' : a.bitsAtoms === 'Atoms' ? 'Hardware' : a.bitsAtoms];
+    if (a.isBuilt && a.product) tags.unshift('Real: ' + a.product);
+    $('tags').innerHTML = '';
+    tags.filter(Boolean).forEach((t, i) => { const s = document.createElement('span'); s.className = 'tag' + (i === 0 && a.isBuilt ? ' hot' : ''); s.textContent = t; $('tags').appendChild(s); });
+
+    $('score').textContent = a.score;
+    const arc = $('arc');
+    arc.style.stroke = ({ real: '#2F5FE0', ship: '#19A974', yc: '#19A974', deep: '#E8A317', break: '#E5484D', no: '#FF3E9A' })[a.verdict.tier];
+    arc.style.strokeDashoffset = 213.6 * (1 - a.score / 100);
+    $('pill').textContent = a.verdict.label; $('pill').dataset.tier = a.verdict.tier;
+    $('vnote').textContent = a.verdict.note;
+    const b = a.breakdown, rows = [['Physics allows it', b.physics], ['Tech is ready', b.tech], ['People would pay', b.market], ['Cheap to start', b.capital]];
+    $('bars').innerHTML = rows.map(([k, v]) => `<div class="bar"><div class="lbl"><span>${k}</span><b>${v}</b></div><div class="track"><div class="fill" style="width:${v}%"></div></div></div>`).join('');
+    $('waited').innerHTML = a.isBuilt ? `Imagined ${a.year}. <b>${a.waitedLabel}.</b>` : `Imagined ${a.year}. Still waiting: <b>${a.waitedLabel}</b>.`;
+
+    const s = a.startup;
+    $('sname').textContent = s.name; $('tagline').textContent = s.tagline; $('pitch').textContent = s.pitch;
+    $('t-round').textContent = s.round; $('t-raise').textContent = s.raise; $('t-post').textContent = s.post; $('t-tam').textContent = s.tam;
+    $('t-model').textContent = s.model; $('t-cust').textContent = s.customer; $('t-risk').textContent = s.risk;
+
+    $('b-x').href = 'https://x.com/intent/post?text=' + encodeURIComponent(shareText(a)) + '&url=' + encodeURIComponent(shareUrl(a));
+    $('foot-id').textContent = `Idea #${a.id} of ${ideas.length.toLocaleString()}`;
+    document.title = `${a.name} · Sci-Fi Idea Roulette`;
+    if (view === 'spin' && location.hash !== '#idea-' + a.id) { try { history.replaceState(null, '', '#idea-' + a.id); } catch (e) { location.hash = 'idea-' + a.id; } }
+  }
+
+  function spin() {
+    if (spinning || !ideas.length) return;
+    const p = pool(); if (!p.length) return;
+    let next = p[Math.floor(Math.random() * p.length)];
+    if (current && next[0] === current.id && p.length > 1) next = p[(p.indexOf(next) + 1) % p.length];
+    const a = Roulette.analyze(next);
+    if (reduce) { render(a); return; }
+    spinning = true;
+    const slot = $('slot'); slot.classList.add('spinning');
+    const start = performance.now(), dur = 950; let last = 0;
+    (function tick(t) {
+      const k = (t - start) / dur;
+      const gap = 40 + 220 * k * k;
+      if (t - last > gap) { slot.textContent = ideas[Math.floor(Math.random() * ideas.length)][2]; last = t; }
+      if (k < 1) requestAnimationFrame(tick);
+      else { slot.classList.remove('spinning'); spinning = false; render(a); track('spin', { id: a.id, score: a.score }); }
+    })(start);
+  }
+
+  function toast(msg) { const t = $('toast'); t.textContent = msg; t.hidden = false; clearTimeout(toast.h); toast.h = setTimeout(() => t.hidden = true, 1800); }
+  function track(ev, props) { try { window.posthog && posthog.capture(ev, props); } catch (e) {} }
+
+  // ---------- Share card (1080x1350, fits IG feed and reels covers) ----------
+  function wrap(ctx, text, x, y, maxW, lh, maxLines) {
+    const words = text.split(' '); let line = '', lines = [];
+    for (const w of words) { const t = line ? line + ' ' + w : w; if (ctx.measureText(t).width > maxW && line) { lines.push(line); line = w; } else line = t; }
+    if (line) lines.push(line);
+    if (lines.length > maxLines) { lines = lines.slice(0, maxLines); lines[maxLines - 1] = lines[maxLines - 1].replace(/\s+\S*$/, '') + '…'; }
+    lines.forEach((l, i) => ctx.fillText(l, x, y + i * lh));
+    return y + lines.length * lh;
+  }
+  function drawCard(a) {
+    const W = 1080, H = 1350, c = document.createElement('canvas'); c.width = W; c.height = H;
+    const x = c.getContext('2d');
+    x.fillStyle = '#E8EBEE'; x.fillRect(0, 0, W, H);
+    x.fillStyle = 'rgba(47,95,224,.10)';
+    for (let i = 0; i < W; i += 14) for (let j = 0; j < H; j += 14) { x.beginPath(); x.arc(i, j, 2, 0, 7); x.fill(); }
+    // ticket
+    x.fillStyle = '#2F5FE0'; x.fillRect(84, 214, 940, 1010);
+    x.fillStyle = '#F6F7F8'; x.fillRect(70, 200, 940, 1010);
+    x.strokeStyle = '#1A1D3A'; x.lineWidth = 5; x.strokeRect(70, 200, 940, 1010);
+    // masthead
+    x.textBaseline = 'alphabetic';
+    x.font = '400 78px "Bowlby One", Impact, sans-serif';
+    x.fillStyle = '#FF3E9A'; x.fillText('SCI-FI IDEA ROULETTE', 76, 136);
+    x.fillStyle = '#1A1D3A'; x.fillText('SCI-FI IDEA ROULETTE', 70, 130);
+    // meta
+    x.font = '400 30px "Space Mono", monospace'; x.fillStyle = '#565B78';
+    wrap(x, `${a.year} · ${a.novel} · ${a.author}`, 110, 270, 860, 40, 2);
+    x.font = '400 74px "Bowlby One", Impact, sans-serif'; x.fillStyle = '#1A1D3A';
+    let y = wrap(x, a.name, 110, 370, 860, 80, 2);
+    x.font = '500 34px "Instrument Sans", sans-serif'; x.fillStyle = '#1A1D3A';
+    y = wrap(x, '“' + (a.desc || '') + '”', 110, y + 20, 860, 46, 3);
+    // divider
+    y += 24; x.setLineDash([14, 10]); x.strokeStyle = '#C9CED8'; x.lineWidth = 3; x.beginPath(); x.moveTo(70, y); x.lineTo(1010, y); x.stroke(); x.setLineDash([]);
+    // score
+    const col = ({ real: '#2F5FE0', ship: '#19A974', yc: '#19A974', deep: '#E8A317', break: '#E5484D', no: '#FF3E9A' })[a.verdict.tier];
+    const cy = y + 190, cx = 250, R = 130;
+    x.lineWidth = 34; x.strokeStyle = '#C9CED8'; x.beginPath(); x.arc(cx, cy, R, Math.PI, 0); x.stroke();
+    x.strokeStyle = col; x.beginPath(); x.arc(cx, cy, R, Math.PI, Math.PI + Math.PI * a.score / 100); x.stroke();
+    x.textAlign = 'center'; x.fillStyle = '#1A1D3A'; x.font = '400 92px "Bowlby One", Impact, sans-serif'; x.fillText(String(a.score), cx, cy - 4);
+    x.font = '700 26px "Space Mono", monospace'; x.fillStyle = '#565B78'; x.fillText('BUILDABLE / 100', cx, cy + 40);
+    x.textAlign = 'left';
+    x.font = '700 40px "Instrument Sans", sans-serif';
+    const lbl = a.verdict.label, vx = 440, vy = y + 60;
+    const two = x.measureText(lbl).width > 500;
+    const lines = two ? [lbl.slice(0, lbl.indexOf(' ', lbl.length / 2 - 4)), lbl.slice(lbl.indexOf(' ', lbl.length / 2 - 4) + 1)] : [lbl];
+    const vw = Math.max(...lines.map(l => x.measureText(l).width)) + 52, vh = two ? 120 : 72;
+    x.fillStyle = col; roundRect(x, vx, vy, vw, vh, 36); x.fill();
+    x.fillStyle = a.verdict.tier === 'deep' ? '#1A1D3A' : '#FFFFFF';
+    lines.forEach((l, i) => x.fillText(l, vx + 26, vy + 50 + i * 48));
+    x.font = '400 28px "Space Mono", monospace'; x.fillStyle = '#565B78';
+    wrap(x, a.waitedLabel, vx, vy + vh + 50, 540, 36, 2);
+    // startup
+    y = cy + 100;
+    x.setLineDash([14, 10]); x.strokeStyle = '#C9CED8'; x.lineWidth = 3; x.beginPath(); x.moveTo(70, y); x.lineTo(1010, y); x.stroke(); x.setLineDash([]);
+    x.font = '700 24px "Space Mono", monospace'; x.fillStyle = '#565B78'; x.fillText('THE STARTUP', 110, y + 56);
+    x.font = '400 62px "Bowlby One", Impact, sans-serif'; x.fillStyle = '#FF3E9A';
+    y = wrap(x, a.startup.name, 110, y + 130, 860, 66, 1);
+    x.font = '700 36px "Instrument Sans", sans-serif'; x.fillStyle = '#1A1D3A';
+    y = wrap(x, a.startup.tagline, 110, y + 6, 860, 46, 2);
+    x.font = '700 32px "Space Mono", monospace'; x.fillStyle = '#1A1D3A';
+    x.fillText(`Raising ${a.startup.raise} · ${a.startup.post} post`, 110, Math.min(y + 40, 1110));
+    x.font = '500 30px "Instrument Sans", sans-serif'; x.fillStyle = '#565B78';
+    if (y + 100 < 1180) wrap(x, 'Biggest risk: ' + a.startup.risk, 110, y + 100, 860, 40, 1);
+    // footer
+    x.font = '700 30px "Space Mono", monospace'; x.fillStyle = '#1A1D3A';
+    x.fillText('Spin yours: ' + BASE.replace(/^https?:\/\//, '').replace(/\/$/, ''), 70, 1290);
+    return c;
+  }
+  function roundRect(x, l, t, w, h, r) { x.beginPath(); x.moveTo(l + r, t); x.arcTo(l + w, t, l + w, t + h, r); x.arcTo(l + w, t + h, l, t + h, r); x.arcTo(l, t + h, l, t, r); x.arcTo(l, t, l + w, t, r); x.closePath(); }
+
+  let cardBlob = null;
+  async function openCard() {
+    if (!current) return;
+    try { await document.fonts.ready; } catch (e) {}
+    const c = drawCard(current);
+    $('card-img').src = c.toDataURL('image/png');
+    cardBlob = null; c.toBlob(b => cardBlob = b, 'image/png');
+    $('overlay').hidden = false; $('card-close').focus();
+    track('card_open', { id: current.id });
+  }
+  async function shareCard() {
+    const a = current;
+    try {
+      const file = cardBlob && new File([cardBlob], `scifi-roulette-${a.id}.png`, { type: 'image/png' });
+      if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({ files: [file], text: shareText(a) + ' ' + shareUrl(a) });
+        track('card_share', { id: a.id }); return;
+      }
+    } catch (e) { if (e && e.name === 'AbortError') return; }
+    toast('Long-press or right-click the image to save it');
+  }
+
+  // ---------- Wiring ----------
+  $('spin').addEventListener('click', spin);
+  document.addEventListener('keydown', e => {
+    if (e.code === 'Space' && view === 'spin' && !/^(INPUT|TEXTAREA|BUTTON|A|SELECT)$/.test(document.activeElement.tagName) && $('overlay').hidden) { e.preventDefault(); spin(); }
+    if (e.key === 'Escape') $('overlay').hidden = true;
+  });
+  document.querySelectorAll('.chip').forEach(ch => ch.addEventListener('click', () => {
+    filter = ch.dataset.f;
+    document.querySelectorAll('.chip').forEach(o => o.setAttribute('aria-pressed', String(o === ch)));
+    if (view === 'all') runBrowse(); else spin();
+  }));
+  $('b-copy').addEventListener('click', () => {
+    const url = shareUrl(current);
+    const done = () => toast('Link copied');
+    try { navigator.clipboard.writeText(url).then(done, () => fallbackCopy(url)); } catch (e) { fallbackCopy(url); }
+    track('copy_link', { id: current.id });
+  });
+  function fallbackCopy(t) { const ta = document.createElement('textarea'); ta.value = t; document.body.appendChild(ta); ta.select(); let ok = false; try { ok = document.execCommand('copy'); } catch (e) {} ta.remove(); toast(ok ? 'Link copied' : t); }
+  $('b-x').addEventListener('click', () => track('post_x', { id: current && current.id }));
+  $('b-card').addEventListener('click', openCard);
+  $('card-close').addEventListener('click', () => $('overlay').hidden = true);
+  $('overlay').addEventListener('click', e => { if (e.target === $('overlay')) $('overlay').hidden = true; });
+  $('card-share').addEventListener('click', shareCard);
+
+  // ---------- Browse all ----------
+  let view = 'spin', analyzed = null, shown = 0, results = [];
+  const PAGE = 60;
+  function allAnalyzed() { return analyzed || (analyzed = ideas.map(Roulette.analyze)); }
+  function inFilter(a) {
+    if (filter === 'unbuilt') return !a.isBuilt;
+    if (filter === 'real') return a.isBuilt;
+    if (filter === 'bits') return a.bitsAtoms === 'Bits';
+    if (filter === 'moon') return a.score < 25;
+    return true;
+  }
+  function esc(t) { return String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]); }
+  function runBrowse() {
+    const q = $('q').value.trim().toLowerCase();
+    results = allAnalyzed().filter(a => inFilter(a) && (!q || (a.name + ' ' + a.novel + ' ' + a.author + ' ' + a.desc + ' ' + a.product).toLowerCase().includes(q)));
+    const so = $('sort').value;
+    const cmp = { 'score-d': (a, b) => b.score - a.score, 'score-a': (a, b) => a.score - b.score, 'year-a': (a, b) => a.year - b.year, 'year-d': (a, b) => b.year - a.year, 'name': (a, b) => a.name.localeCompare(b.name) }[so];
+    results.sort(cmp);
+    $('found').textContent = `${results.length.toLocaleString()} ${results.length === 1 ? 'invention' : 'inventions'}`;
+    $('list').innerHTML = ''; shown = 0; showMore();
+  }
+  function showMore() {
+    const html = results.slice(shown, shown + PAGE).map(a => `<button class="row" type="button" data-id="${a.id}"><span><div class="nm">${esc(a.name)}</div><div class="sub">${a.year} · ${esc(a.novel || 'Unknown')} · ${esc(a.author || 'Unknown')}</div>${a.desc ? `<div class="d">${esc(a.desc)}</div>` : ''}</span><span class="badge" data-tier="${a.verdict.tier}" title="${esc(a.verdict.label)}">${a.score}</span></button>`).join('');
+    $('list').insertAdjacentHTML('beforeend', html);
+    shown += PAGE;
+    $('more').hidden = shown >= results.length;
+    $('list').hidden = !results.length;
+  }
+  function setView(v) {
+    view = v;
+    $('tab-spin').setAttribute('aria-selected', String(v === 'spin'));
+    $('tab-all').setAttribute('aria-selected', String(v === 'all'));
+    $('browse').hidden = v !== 'all';
+    $('ticket').hidden = v !== 'spin';
+    document.querySelector('.spinbar').hidden = v !== 'spin';
+    if (v === 'all') { runBrowse(); if (location.hash !== '#all') { try { history.replaceState(null, '', '#all'); } catch (e) {} } document.title = 'All ideas · Sci-Fi Idea Roulette'; track('browse_open'); }
+    else if (current) { try { history.replaceState(null, '', '#idea-' + current.id); } catch (e) {} document.title = `${current.name} · Sci-Fi Idea Roulette`; }
+  }
+  $('tab-spin').addEventListener('click', () => setView('spin'));
+  $('tab-all').addEventListener('click', () => setView('all'));
+  let qt; $('q').addEventListener('input', () => { clearTimeout(qt); qt = setTimeout(runBrowse, 120); });
+  $('sort').addEventListener('change', runBrowse);
+  $('more').addEventListener('click', showMore);
+  $('list').addEventListener('click', e => {
+    const b = e.target.closest('.row'); if (!b) return;
+    const r = byId.get(+b.dataset.id); if (!r) return;
+    render(Roulette.analyze(r)); setView('spin'); scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+    track('browse_pick', { id: +b.dataset.id });
+  });
+
+  function fromHash() {
+    if (location.hash === '#all') { if (!current) render(Roulette.analyze(ideas.find(i => i[2] === 'Mood Organ') || ideas[0])); setView('all'); return true; }
+    const m = /^#idea-(\d+)$/.exec(location.hash);
+    const r = m && byId.get(+m[1]);
+    if (r && (!current || current.id !== r[0])) render(Roulette.analyze(r));
+    if (r && view !== 'spin') setView('spin');
+    return !!r;
+  }
+  addEventListener('hashchange', fromHash);
+
+  fetch('ideas.json').then(r => r.json()).then(d => {
+    ideas = d; d.forEach(i => byId.set(i[0], i));
+    $('count').textContent = $('count2').textContent = d.length.toLocaleString();
+    if (!fromHash()) {
+      // open on a lively example (Mood Organ) the first time, random after
+      const mood = d.find(i => i[2] === 'Mood Organ');
+      render(Roulette.analyze(mood || d[Math.floor(Math.random() * d.length)]));
+    }
+  }).catch(() => { $('slot').textContent = 'The idea bank did not load. Refresh to try again.'; });
+})();
+</script>
